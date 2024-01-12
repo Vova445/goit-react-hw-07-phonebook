@@ -4,23 +4,16 @@ import styles from "./Phonebook.module.css";
 import ContactForm from "./Refactor/ContactForm";
 import Filter from "./Refactor/Filter";
 import ContactList from "./Refactor/ContactList";
-import { saveContact } from "../../Redux/contactSlice";
+import { fetchContacts } from "../../Redux/contactSlice";
 
 const Phonebook = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector((state) => state.contacts.contacts);
+  const isLoading = useSelector((state) => state.contacts.isLoading);
+  const error = useSelector((state) => state.contacts.error);
 
   useEffect(() => {
-    const storedContacts = JSON.parse(localStorage.getItem("contacts"));
-    if (storedContacts) {
-      dispatch(saveContact(storedContacts));
-    }
+    dispatch(fetchContacts());
   }, [dispatch]);
-
-  useEffect(() => {
-    localStorage.clear();
-    localStorage.setItem("contacts", JSON.stringify(contacts));
-  }, [contacts]);
 
   return (
     <div className={styles.container}>
@@ -29,6 +22,8 @@ const Phonebook = () => {
 
       <h2>Contacts</h2>
       <Filter />
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
       <ContactList />
     </div>
   );

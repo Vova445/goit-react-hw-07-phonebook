@@ -1,7 +1,7 @@
 import React from "react";
 import styles from '../Phonebook.module.css';
 import { useDispatch, useSelector } from "react-redux";
-import { deleteContact, clearContacts } from "../../../Redux/contactSlice";
+import { deleteContact } from "../../../Redux/contactSlice";
 
 const ContactList = () => {
   const dispatch = useDispatch();
@@ -17,13 +17,16 @@ const ContactList = () => {
   };
 
   const handleClearContacts = () => {
-    dispatch(clearContacts());
+    filteredContacts.forEach((contact) => {
+      dispatch(deleteContact(contact.id));
+    });
   };
+  
 
   return (
     <div>
       <ul>
-        {filteredContacts.map(contact => (
+        {filteredContacts.map((contact) => (
           <li key={contact.id}>
             {contact.name}: {contact.number}
             <button onClick={() => handleDeleteContact(contact.id)} className={styles.deleteButton}>

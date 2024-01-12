@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { saveContact } from "../../../Redux/contactSlice";
+import { addContact } from "../../../Redux/contactSlice";
 import { nanoid } from "nanoid";
 
 const ContactForm = () => {
   const dispatch = useDispatch();
+  const contacts = useSelector((state) => state.contacts.contacts);
+
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
-  const contacts = useSelector((state) => state.contacts.contacts);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "name") {
@@ -24,11 +26,11 @@ const ContactForm = () => {
       return;
     }
     const newContact = {
-      id: nanoid(), 
+      id: nanoid(),
       name,
       number,
     };
-    dispatch(saveContact(newContact));
+    dispatch(addContact(newContact));
     setName("");
     setNumber("");
   };
@@ -43,9 +45,7 @@ const ContactForm = () => {
         Number
         <input type="tel" name="number" value={number} onChange={handleInputChange} required />
       </label>
-      <button type="submit">
-        Add Contact
-      </button>
+      <button type="submit">Add Contact</button>
     </form>
   );
 };
