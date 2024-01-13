@@ -23,6 +23,8 @@ const contactsSlice = createSlice({
     contacts: [],
     filter: '',
     isLoading: false,
+    isAdding: false,  
+    isDeleting: false, 
     error: null,
   },
   reducers: {
@@ -44,12 +46,30 @@ const contactsSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message;
       })
+      .addCase(addContact.pending, (state) => {
+        state.isAdding = true;
+        state.error = null;
+      })
       .addCase(addContact.fulfilled, (state, action) => {
+        state.isAdding = false;
         state.contacts.push(action.payload);
       })
+      .addCase(addContact.rejected, (state, action) => {
+        state.isAdding = false;
+        state.error = action.error.message;
+      })
+      .addCase(deleteContact.pending, (state) => {
+        state.isDeleting = true;
+        state.error = null;
+      })
       .addCase(deleteContact.fulfilled, (state, action) => {
+        state.isDeleting = false;
         state.contacts = state.contacts.filter((contact) => contact.id !== action.payload);
       })
+      .addCase(deleteContact.rejected, (state, action) => {
+        state.isDeleting = false;
+        state.error = action.error.message;
+      });
   },
 });
 
