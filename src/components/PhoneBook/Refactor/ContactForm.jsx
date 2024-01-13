@@ -25,7 +25,11 @@ const ContactForm = () => {
     e.preventDefault();
   
     if (contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase())) {
-      alert(`${name} is already in contacts`);
+      Report.warning(
+        'This name is already in contacts',
+        `Contact with name "${name}" is already in contacts`,
+        'Okay',
+      );
       return;
     }
   
